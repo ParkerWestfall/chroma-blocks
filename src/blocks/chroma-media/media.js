@@ -72,7 +72,7 @@ registerBlockType( 'chroma-blocks/media-upload', {
     }
 	},
 	edit: props => {
-    const { attributes: { imgID, imgURL, imgAlt, caption, captionLink, center, centerDark, alignment }, className, setAttributes, isSelected } = props;
+    const { attributes: { imgID, imgURL, imgAlt, caption, captionLink, center, centerDark, contStyle, alignment }, className, setAttributes, isSelected } = props;
     const onSelectImage = img => {
         var captionLink = null
         fetch(`/wp-json/wp/v2/media/${img.id}`)
@@ -116,9 +116,10 @@ registerBlockType( 'chroma-blocks/media-upload', {
       else if(classList.indexOf(imgCont) != -1)
         classList.remove(imgCont)
       if (centerDark)
-        classList.push(imgDark)
+        classList.push(imgCont, imgDark)
       else if (classList.indexOf(imgDark) != -1)
-        classList.remove(imgDark)
+        classList.remove(imgCont, imgDark)
+      classList.push(alignment)
       props.setAttributes({
         contStyle: classList.join(' ')
       })
@@ -131,12 +132,12 @@ registerBlockType( 'chroma-blocks/media-upload', {
           <Toolbar>
             <Tooltip text="Center">
               <Button className="components-button" style={center ? {background: '#4e4e4e', color: '#fff'}:null} onClick={ () => setAttributes( { center: ! center } ) }>
-                Center
+                Container
               </Button>
             </Tooltip>
             <Tooltip text="Center Dark">
               <Button className='components-button' style={centerDark ? {background: '#4e4e4e', color: '#fff'}:null} onClick={ () => setAttributes( { centerDark: ! centerDark } ) }>
-                Center Dark
+                Dark
               </Button>
             </Tooltip>
           </Toolbar>
@@ -166,14 +167,15 @@ registerBlockType( 'chroma-blocks/media-upload', {
 	},
 	save: props => {
     const { imgURL, imgAlt, caption, captionLink, center, centerDark, contStyle } = props.attributes;
+    const figCapClass = (caption.length > 0) ? 'entry-content_figure fig-wcaption' : 'entry-content_figure';
     return (
       <div className={contStyle}>
-        <figure class="entry-content_figure">
+        <figure className={figCapClass}>
           <img
             src={ imgURL }
             alt={ imgAlt }
           />
-          { caption ? (
+          { caption.length > 0 ? (
             <figcaption className="figcaption">
               <a href={captionLink} className="figcaption_link" target="_blank" rel="noopener">
                 {caption}

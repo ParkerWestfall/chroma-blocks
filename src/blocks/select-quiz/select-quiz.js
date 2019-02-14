@@ -1,6 +1,6 @@
  //Import CSS.
-import './style.scss';
-import './editor.scss';
+ import './style.scss';
+ import './editor.scss';
 import React from 'react';
 import Select from 'react-select';
 
@@ -25,7 +25,6 @@ const actions = {
     }
   },
 }
-
 const store = registerStore('chroma-blocks/select-quiz', {
   reducer( state = { quiz: {} }, action ) {
     switch (action.type) {
@@ -75,7 +74,9 @@ registerBlockType( 'chroma-blocks/select-quiz', {
       ([key, value]) => {
         if (key == 'quiz') {
           if (typeof value !== 'undefined' && Array.isArray(value)) {
-            quizList.push( {value: value[0].id, label: value[0].title.rendered} )
+            value.forEach( (subVal, i) => {
+              quizList.push( {value: subVal.id, label: subVal.title.rendered} )
+            })
           }
         }
       }
@@ -100,7 +101,6 @@ registerBlockType( 'chroma-blocks/select-quiz', {
           <Select
             name='cmquiz-select'
             value={ JSON.parse( selectedOption ) }
-
             onChange={ handleSelectChange }
             options={quiz}
           />

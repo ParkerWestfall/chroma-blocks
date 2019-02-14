@@ -9,7 +9,7 @@ const { IconButton, Tooltip, TextControl } = wp.components;
 registerBlockType( 'chroma-blocks/chroma-button', {
 	title: 'Chroma Button',
 	icon: 'warning',
-	category: 'common',
+	category: 'Chroma',
 	attributes: {
     text: {
       type: 'string',

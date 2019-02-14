@@ -35,7 +35,8 @@ registerBlockType( 'chroma-blocks/quiz-block', {
 			type: 'string',
 			source: 'attribute',
 			selector: '.cm-quiz-slide',
-			attribute: 'data-correct'
+			attribute: 'data-correct',
+      default: 'a'
 		},
 		explanation : {
 			type: 'array',

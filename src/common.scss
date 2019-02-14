@@ -11,3 +11,14 @@ $white: #f4f4f4;
 $gray: #dedede;
 $green: #bada55;
 $red: orangered;
+
+.wp-block-embed {
+  height: auto;
+  padding: 0px;
+  margin: 12px auto 16px;
+  text-align: center;
+}
+.wp-block-embed-facebook {
+  padding: 8px 0px;
+  background: #111;
+}

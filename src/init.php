@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-
 function chroma_blocks_category( $categories, $post ) {
     return array_merge(
         $categories,
@@ -26,18 +25,12 @@ function chroma_blocks_category( $categories, $post ) {
 add_filter( 'block_categories', 'chroma_blocks_category', 10, 2 );
 
 
-function chroma_blocks_cgb_block_assets() {
+function chroma_blocks_assets() {
 	// Styles.
-	wp_enqueue_style(
-		'chroma_blocks-cgb-style-css', // Handle.
-		plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ), // Block style CSS.
-		array( 'wp-blocks' ), // Dependency to include the CSS after it.
-		filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ) // Version: filemtime — Gets file modification time.
-	);
-} // End function chroma_blocks_cgb_block_assets().
-
-// Hook: Frontend assets.
-add_action( 'enqueue_block_assets', 'chroma_blocks_cgb_block_assets', 100 );
+	wp_register_style( 'cm-style', plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ )), null,  filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ));
+	wp_enqueue_style('cm-style');
+}
+add_action( 'enqueue_block_assets', 'chroma_blocks_assets', 100 );
 
 
 function chroma_blocks_cgb_editor_assets() {

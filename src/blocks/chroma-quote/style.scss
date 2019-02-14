@@ -38,3 +38,14 @@
    filter: hue-rotate(-110deg);
  }
 }
+
+p.has-drop-cap:not(:focus):first-letter {
+  float: left;
+  font-weight: 700;
+  margin-right: 7px;
+  letter-spacing: -.03em;
+  margin-bottom: -.08em;
+  font-size: 3.8rem;
+  line-height: .875;
+  color: #000;
+}

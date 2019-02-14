@@ -1,9 +1,9 @@
 import './style.scss'
 import './editor.scss'
 
-const {  RawHTML } = wp.element
+const { RawHTML } = wp.element
 const { __ } = wp.i18n
-const { registerBlockType } = wp.blocks
+const { registerBlockType, createBlock } = wp.blocks
 const {
   RichText,
   AlignmentToolbar,
@@ -13,8 +13,10 @@ const {
   MediaUpload,
   InnerBlocks,
 } = wp.editor
-const { Button } = wp.components;
+const { Button, Next } = wp.components;
 const {withSelect} = wp.data;
+
+
 const TEMPLATE = [
   ['chroma-blocks/media-upload'],
 ]
@@ -40,26 +42,53 @@ registerBlockType( 'chroma-blocks/slider-block', {
       selector: '.sb_bubble',
       attribute: 'data-slide-count',
       default: 1
+    },
+    slidesLength: {
+      source: 'attribute',
+      selector: '.sb',
+      attribute: 'data-slides-length',
+      default: 0
+    },
+    categories: {
+      source: 'attribute',
+      selector: '.sb',
+      attribute: 'data-categories',
+      default: ''
+    },
+    isGallery: {
+      source: 'attribute',
+      selector: '.sb',
+      attribute: 'data-gallery',
+      default: 'false'
     }
 	},
 	edit: withSelect( (select, props) => {
+    const categories = select( 'core/editor' ).getEditedPostAttribute( 'categories' ),
+        slideInfo = select('chroma').getSlideCount(props.clientId)
     return {
-      slideCount: select('chroma').getSlideCount(props.clientId)
+      slideCount: slideInfo[0],
+      slidesLength: slideInfo[1],
+      isGallery: (select( 'core/editor' ).getEditedPostAttribute( 'categories' ).indexOf(8699) > -1 ) ? 'true' : 'false',
+      categories: select( 'core/editor' ).getEditedPostAttribute( 'categories' ).join("")
     }
   })( props => {
-		const { attributes: { content, sub_title }, clientId, slideCount, focus, className, setFocus, setAttributes, isSelected } = props
+		const { attributes: { content, sub_title }, clientId, slideCount, slidesLength, focus, className, setFocus, setAttributes, isSelected, categories, isGallery } = props
+    console.log(isGallery)
     const onChangeSlideText = ( value ) => {
       setAttributes( { content: value } )
     }
     const ALLOWED_BLOCKS = ['chroma-blocks/media-upload', 'core/image', 'core/paragraph', 'core/list', 'core/table', 'core/button', 'core/classic-block']
     wp.data.dispatch('chroma').countSlide()
+    wp.data.dispatch('chroma').returnCategories(clientId)
 		return (
-      <div className={'sb'} >
+      <div className={'sb'} data-slides-length={slidesLength} data-categories={categories} data-gallery={isGallery}>
         <div data-slide-count={slideCount} className="sb_bubble"></div>
         <RichText
           tagName="h2"
           className="sb_h2"
-          onChange={ (newTitle) => { props.setAttributes( { sub_title: newTitle } )} }
+          onChange={ (newTitle) => { console.log(createBlock( 'core/list', {
+          						values: `<li>check</li>`,
+          					} )); props.setAttributes( { sub_title: newTitle } )} }
           value={ sub_title }
           focus={ focus }
           onFocus={ setFocus }
@@ -70,13 +99,39 @@ registerBlockType( 'chroma-blocks/slider-block', {
 		);
 	}),
 	save: props => {
-    const { slideCount, sub_title, imgURL, imgAlt, content, caption, captionLink } = props.attributes;
+    const { slideCount, slidesLength, sub_title, imgURL, imgAlt, content, caption, captionLink, categories, isGallery } = props.attributes;
     return (
-      <div className='sb'>
-        <div data-slide-count={slideCount} className="sb_bubble"></div>
-        <RichText.Content tagName="h2" className="sb_h2" value={ sub_title } />
-        <InnerBlocks.Content />
-      </div>
+      <React.Fragment>
+        {
+          (isGallery === 'true' && slideCount === slidesLength)
+          ?
+            <RawHTML>
+              { '<!--nextpage-->' }
+            </RawHTML>
+          : null
+        }
+        <div className='sb' data-slides-length={slidesLength} data-categories={categories} data-gallery={isGallery}>
+          <div data-slide-count={slideCount} className="sb_bubble"></div>
+          <RichText.Content tagName="h2" className="sb_h2" value={ sub_title } />
+          <InnerBlocks.Content />
+        </div>
+        {
+          (isGallery === 'true')
+            ?
+              <RawHTML>
+                { '<!--nextpage-->' }
+              </RawHTML>
+            : null
+        }
+        {
+          (isGallery === 'true' && slideCount == 1)
+          ?
+            <RawHTML>
+              { '<!--nextpage-->' }
+            </RawHTML>
+          : null
+        }
+      </React.Fragment>
   	)
   }
 } );

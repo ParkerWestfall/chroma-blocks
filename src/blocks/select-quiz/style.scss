@@ -1,57 +1,60 @@
-.image-container {
-    max-width: 320px;
-    margin: 0 auto;
-  &-left {
-      float: left;
-      margin-right: 10px;
+$mediaFold: 720px;
+$mediaFoldLow: 400px;
+#cm-quiz-loader {
+  background: #000;
+  filter: brightness(0);
+  height: auto;
+  min-height: 540px;
+  max-height: 800px;
+  overflow: hidden;
+  transition: all 1s;
+  transition-delay: 1s;
+  margin: 1.2em;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  box-shadow: 0px 0px 1.56em -0.08em rgba(0,0,0,.78);
+  li {
+    color: #ffff;
   }
-  &-right {
-      float: right;
-      margin-left: 10px;
+  @media (max-width: 1020px) {
+    margin-left: 0px;
+    margin-right: 0px;
+    border-radius: 0px;
   }
-  &-inline {
-    margin: 0 1px 0px 2px;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    & figure {
-      padding: 0px !important;
-      height: auto !important;
-      & img {
-        position: relative !important;
-      }
+  &.is-active {
+    max-height: 5000px;
+    filter: brightness(1);
+  }
+  .cm-quiz {
+    margin: 0px auto;
+    border-radius: 4px;
+    overflow: hidden;
+    &-box {
+      margin-bottom: 0px;
     }
   }
-  &--dark {
+  .cm-quiz-slide-ans {
+    list-style: none;
+    padding: 18px;
+    margin: auto auto 0px;
     max-width: 100%;
-    background: #171717;
-    margin: 4px auto 12px;
-    padding: 4%;
-    & figure {
-      max-width: 606.762745781px;
-      max-height: 606.762745781px;
-      margin: 0px auto;
-      height: auto !important;
-      padding-bottom: 0px !important;
-      a {
-        color: '#bbbbbb'
+    li {
+      color: #fff;
+      margin: 16px 12.5%;
+      font-size: 1rem;
+      line-height: 1.35;
+      @media (max-width: $mediaFold) {
+        font-size: 3vw;
+      }
+      @media (max-width: $mediaFoldLow) {
+        font-size: 3.4vw;
+      }
+      &:nth-of-type(2n) {
+        margin: 16px 3.125%;
+      }
+      &:nth-of-type(odd) {
+        margin: 16px 3.125%;
       }
     }
-    & img {
-      position: relative !important;
-      max-height: 606.762745781px;
-      object-fit: contain;
-      height: auto !important;
-      }
   }
-}
-
-@media (max-width: 620px) {
-    .image-container,
-    .image-container-left,
-    .image-container-right {
-        margin: 0 auto;
-        float: none;
-    }
 }

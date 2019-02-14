@@ -15,7 +15,7 @@ const { RichText } = wp.editor;
 registerBlockType( 'chroma-blocks/cool-quote', {
 	title: 'Cool Quote',
 	icon: 'format-quote',
-	category: 'common',
+	category: 'Chroma',
 	attributes: {
 		content: {
 			type: 'array',
